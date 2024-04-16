@@ -19,6 +19,17 @@ monthly_challenges = {
   "december": "December challenge"
 }
 
+def index(request):
+  list_items = ""
+  months = list(monthly_challenges.keys())
+
+  for month in months:
+    capitialized_month = month.capitalize()
+    month_path = reverse("month-challenge", args=[month])
+    list_items += f"<h2><li><a href=\"{month_path}\">{capitialized_month}</li></h2>"
+  response_data = f"<ul>{list_items}</ul>"
+  return HttpResponse(response_data)
+
 def monthly_challenge_by_number(request, month):
   months = list(monthly_challenges.keys())
   if month <= 0 or month > len(months):
@@ -31,6 +42,7 @@ def monthly_challenge_by_number(request, month):
 def monthly_challenge(request, month):
   try:
     challenge_text = monthly_challenges[month]
-    return HttpResponse(challenge_text)
+    response_data = f"<h1>{challenge_text}</h1>"
+    return HttpResponse(response_data)
   except:
-    return HttpResponseNotFound("This month is not supported!")
+    return HttpResponseNotFound("<h1>This month is not supported!</h1>")
